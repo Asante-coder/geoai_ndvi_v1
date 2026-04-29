@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  geoai-ndvi:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/cache:/app/data/cache
+      - ./logs:/app/logs
+    env_file:
+      - .env
+    restart: unless-stopped
