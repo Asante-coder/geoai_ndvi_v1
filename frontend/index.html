@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoAI · NDVI Vegetation Health</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+  <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+
+  <!-- Geocoder (Nominatim, no API key) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.css" />
+  <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
+
+  <!-- External data parsers -->
+  <script src="https://unpkg.com/shpjs@3.6.3/dist/shp.js"></script>
+  <script src="https://unpkg.com/@mapbox/togeojson@0.16.0/togeojson.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="/frontend/css/style.css" />
+</head>
+<body>
+  <aside id="sidebar">
+    <h1>&#128752; GeoAI NDVI</h1>
+    <p class="subtitle">Sentinel-2 Vegetation Health Assessment</p>
+
+    <!-- ── Scene search controls ── -->
+    <section id="controls">
+      <label>Date Range</label>
+      <div class="row">
+        <input type="date" id="date-start" value="2024-01-01" />
+        <input type="date" id="date-end"   value="2024-03-31" />
+      </div>
+
+      <label>Max Cloud Cover (%)</label>
+      <input type="range" id="cloud-max" min="0" max="100" value="20" />
+      <span id="cloud-val">20%</span>
+
+      <button id="btn-search" class="btn primary">&#128269; Search Scenes</button>
+    </section>
+
+    <!-- ── Scene list + compute ── -->
+    <section id="scene-list" class="hidden">
+      <label>Available Scenes</label>
+      <select id="scene-select" size="5"></select>
+      <button id="btn-compute" class="btn success">&#9889; Compute NDVI</button>
+    </section>
+
+    <!-- ── NDVI stats + report ── -->
+    <section id="stats-panel" class="hidden">
+      <div class="stats-header">
+        <h2>NDVI Statistics</h2>
+        <button id="btn-clear" class="btn-clear" title="Clear NDVI and start over">&#10005; Clear</button>
+      </div>
+      <table id="stats-table"></table>
+      <canvas id="histogram-chart" height="150"></canvas>
+
+      <div id="legend">
+        <h3>Legend</h3>
+        <div class="legend-bar"></div>
+        <div class="legend-labels">
+          <span>-1 Sea/Water</span>
+          <span>0 Bare</span>
+          <span>+1 Dense veg</span>
+        </div>
+      </div>
+
+      <!-- Report download buttons -->
+      <div class="report-row">
+        <button id="btn-report-html" class="btn report-btn" title="Download full HTML report">
+          &#128196; HTML Report
+        </button>
+        <button id="btn-report-csv" class="btn report-btn" title="Download stats as CSV">
+          &#128202; CSV Stats
+        </button>
+      </div>
+    </section>
+
+    <!-- ── External data layers ── -->
+    <section id="data-layers">
+      <div class="section-header">
+        <h3>Data Layers</h3>
+        <button id="btn-clear-layers" class="btn-icon" title="Remove all layers">&#128465;</button>
+      </div>
+      <button id="btn-upload-file" class="btn upload-btn">
+        &#128196; Load GeoJSON / KML / Shapefile
+      </button>
+      <input type="file" id="file-input" accept=".geojson,.json,.kml,.zip" class="hidden" />
+      <p class="upload-hint">or drag &amp; drop onto the map</p>
+      <div id="layer-list"></div>
+    </section>
+
+    <!-- Spinner -->
+    <div id="loader" class="hidden">
+      <div class="spinner"></div>
+      <span id="loader-msg">Processing…</span>
+    </div>
+
+    <div id="error-msg" class="hidden"></div>
+  </aside>
+
+  <main id="map"></main>
+
+  <script src="/frontend/js/api.js"></script>
+  <script src="/frontend/js/map.js"></script>
+  <script src="/frontend/js/chart.js"></script>
+  <script src="/frontend/js/upload.js"></script>
+  <script src="/frontend/js/report.js"></script>
+  <script src="/frontend/js/app.js"></script>
+</body>
+</html>
