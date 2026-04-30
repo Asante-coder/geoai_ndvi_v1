@@ -88,7 +88,19 @@ function _addLayer(name, geojson) {
   const bounds = layer.getBounds();
   if (bounds.isValid()) map.fitBounds(bounds, { padding: [30, 30] });
 
-  uploadedLayers.push({ name, layer, color });
+  uploadedLayers.push({ name, layer, color, visible: true });
+  renderLayerList();
+}
+
+function toggleUploadLayer(index) {
+  const entry = uploadedLayers[index];
+  if (!entry) return;
+  if (entry.visible) {
+    map.removeLayer(entry.layer);
+  } else {
+    map.addLayer(entry.layer);
+  }
+  entry.visible = !entry.visible;
   renderLayerList();
 }
 
@@ -112,9 +124,13 @@ function renderLayerList() {
     return;
   }
   list.innerHTML = uploadedLayers.map((l, i) => `
-    <div class="layer-item">
-      <span class="layer-dot" style="background:${l.color}"></span>
+    <div class="layer-item${l.visible ? "" : " layer-hidden"}">
+      <span class="layer-dot" style="background:${l.visible ? l.color : "#475569"}"></span>
       <span class="layer-name" title="${l.name}">${l.name}</span>
+      <button class="layer-toggle${l.visible ? "" : " is-off"}"
+              onclick="toggleUploadLayer(${i})"
+              title="${l.visible ? "Hide layer" : "Show layer"}"
+              style="color:${l.visible ? l.color : "#475569"}">&#9679;</button>
       <button class="layer-remove" onclick="removeUploadLayer(${i})" title="Remove">&#10005;</button>
     </div>
   `).join("");
