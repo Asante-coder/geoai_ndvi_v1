@@ -1,0 +1,27 @@
+# Normalise line endings to LF in the repository; check out as-is on all platforms
+* text=auto eol=lf
+
+# Force LF for shell/Python scripts even on Windows
+*.py    text eol=lf
+*.sh    text eol=lf
+*.bat   text eol=crlf
+*.ps1   text eol=crlf
+
+# Web assets
+*.html  text eol=lf
+*.css   text eol=lf
+*.js    text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.txt   text eol=lf
+*.env   text eol=lf
+
+# Treat GeoTIFF and zip as binary
+*.tif   binary
+*.tiff  binary
+*.zip   binary
+*.gz    binary
+*.png   binary
+*.jpg   binary
