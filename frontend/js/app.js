@@ -71,6 +71,8 @@ async function onCompute() {
     lastResult = result;
 
     addNdviLayer(currentScene.id);
+    const dt = currentScene.datetime ? currentScene.datetime.slice(0, 10) : currentScene.id.slice(0, 16);
+    registerNdviLayer(currentScene.id, getNdviLayer(), `NDVI · ${dt}`);
     fitToAOI();
     renderStats(result.stats);
     renderHistogram(result.histogram.bins, result.histogram.counts);
@@ -86,6 +88,7 @@ async function onCompute() {
 
 function onClear() {
   clearNdviLayer();
+  unregisterNdviLayer();
   hide("stats-panel");
   document.getElementById("stats-table").innerHTML = "";
   if (typeof histChart !== "undefined" && histChart) {
