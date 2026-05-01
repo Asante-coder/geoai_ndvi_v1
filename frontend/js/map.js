@@ -155,12 +155,19 @@ function getAOIGeometry() {
 function addNdviLayer(sceneId) {
   if (ndviLayer) map.removeLayer(ndviLayer);
   activeSceneId = sceneId;
+
+  // Dedicated pane so upload.js can control its z-order alongside data layers
+  if (!map.getPane("layer-pane-ndvi")) map.createPane("layer-pane-ndvi");
+
   ndviLayer = L.tileLayer(tileUrl(sceneId), {
     opacity:     0.8,
     maxZoom:     16,
     attribution: "NDVI · Sentinel-2 L2A",
+    pane:        "layer-pane-ndvi",
   }).addTo(map);
 }
+
+function getNdviLayer() { return ndviLayer; }
 
 function fitToAOI() {
   const layers = drawnLayer.getLayers();

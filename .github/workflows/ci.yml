@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: ["main", "chore/**", "feat/**", "fix/**"]
+    branches: ["main", "dev", "feat/**", "fix/**", "chore/**"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "dev"]
 
 jobs:
   test:
@@ -25,6 +25,7 @@ jobs:
           pip install \
             fastapi uvicorn[standard] \
             rasterio pyproj shapely numpy \
+            Pillow \
             pystac-client planetary-computer \
             rio-tiler rio-cogeo \
             loguru pydantic-settings python-dotenv python-multipart \
